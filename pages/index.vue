@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper-home">
-    <div v-if="preloaderHidden" class="wrapper">
+    <div class="wrapper">
       <HomeSectionMain />
       <HomeSectionInfo />
       <HomeSectionProduct :products="products" :handleFilterItems="handleFilterItems" :currentCategory="filterRef" />

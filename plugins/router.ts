@@ -8,6 +8,9 @@ const sleep = (ms: number) => {
 export default ({ app, $Scrollbar, store }: Context) => {
   ;(app.router as VueRouter).beforeEach(async (to, from, next) => {
     store.dispatch('changeLoaderStatus', true)
+
+    await sleep(1500)
+
     next()
   })
   ;(app.router as VueRouter).afterEach(() => {

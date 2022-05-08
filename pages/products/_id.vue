@@ -1,5 +1,5 @@
 <template>
-  <div v-if="preloaderHidden && !fetching" class="product-page">
+  <div v-if="!fetching" class="product-page">
     <SectionProductMain :product="product" />
   </div>
 </template>

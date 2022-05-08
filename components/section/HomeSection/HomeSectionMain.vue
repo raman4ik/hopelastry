@@ -12,7 +12,7 @@
 
 <script lang="ts">
 import {
-  defineComponent,
+  defineComponent, inject,
   onMounted,
   ref,
   useContext
@@ -26,6 +26,7 @@ export default defineComponent({
     const bgRef = ref(null)
     const imgRef = ref(null)
     const titleRef = ref(null)
+    const preloaderHidden = inject('preloaderHidden')
 
     const homeImageAnimate = () => {
       $gsap

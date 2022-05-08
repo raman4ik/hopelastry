@@ -9,7 +9,9 @@
       </div>
     </template>
 
-    <PreLoader @onComplete="onPreloaderComplete" />
+    <Loader />
+
+<!--    <PreLoader @onComplete="onPreloaderComplete" />-->
   </div>
 </template>
 
@@ -43,39 +45,39 @@ export default defineComponent({
 
     provide('preloaderHidden', preloaderHidden)
 
-    const onPreloaderComplete = async () => {
-      preloaderHidden.value = true
+    // const onPreloaderComplete = async () => {
+    //   preloaderHidden.value = true
+    //
+    //   await nextTick()
 
-      await nextTick()
-
-      const scroller = document.querySelector('.scroller')
-
-      // @ts-ignore
-      const bodyScrollBar = $Scrollbar.init(scroller, {
-        damping: 0.1,
-        delegateTo: document
-      })
-
-      // @ts-ignore
-      $ScrollTrigger.scrollerProxy('.scroller', {
-        scrollTop(value: any) {
-          if (arguments.length) {
-            bodyScrollBar.scrollTop = value
-          }
-          return bodyScrollBar.scrollTop
-        }
-      })
-
-      // @ts-ignore
-      bodyScrollBar.addListener($ScrollTrigger.update)
-
-      if (isHome.value) {
-        bodyScrollBar.updatePluginOptions('myPlugin', { animateProcess: true })
-      }
-
-      // @ts-ignore
-      $ScrollTrigger.defaults({ scroller })
-    }
+      // const scroller = document.querySelector('.scroller')
+      //
+      // // @ts-ignore
+      // const bodyScrollBar = $Scrollbar.init(scroller, {
+      //   damping: 0.1,
+      //   delegateTo: document
+      // })
+      //
+      // // @ts-ignore
+      // $ScrollTrigger.scrollerProxy('.scroller', {
+      //   scrollTop(value: any) {
+      //     if (arguments.length) {
+      //       bodyScrollBar.scrollTop = value
+      //     }
+      //     return bodyScrollBar.scrollTop
+      //   }
+      // })
+      //
+      // // @ts-ignore
+      // bodyScrollBar.addListener($ScrollTrigger.update)
+      //
+      // if (isHome.value) {
+      //   bodyScrollBar.updatePluginOptions('myPlugin', { animateProcess: true })
+      // }
+      //
+      // // @ts-ignore
+      // $ScrollTrigger.defaults({ scroller })
+    // }
     const light = computed(() => {
       return (
         route.value.name?.search('index') !== -1 ||
@@ -112,6 +114,34 @@ export default defineComponent({
       const doc = document.documentElement
       const productsCart = $cookies.get('Products')
 
+      const scroller = document.querySelector('.scroller')
+
+      // @ts-ignore
+      const bodyScrollBar = $Scrollbar.init(scroller, {
+        damping: 0.1,
+        delegateTo: document
+      })
+
+      // @ts-ignore
+      $ScrollTrigger.scrollerProxy('.scroller', {
+        scrollTop(value: any) {
+          if (arguments.length) {
+            bodyScrollBar.scrollTop = value
+          }
+          return bodyScrollBar.scrollTop
+        }
+      })
+
+      // @ts-ignore
+      bodyScrollBar.addListener($ScrollTrigger.update)
+
+      if (isHome.value) {
+        bodyScrollBar.updatePluginOptions('myPlugin', { animateProcess: true })
+      }
+
+      // @ts-ignore
+      $ScrollTrigger.defaults({ scroller })
+
       if (productsCart) {
         store.dispatch('savedProducts', {productsCart})
       }
@@ -141,7 +171,6 @@ export default defineComponent({
       isCookieAccepted,
       handleAccept,
       preloaderHidden,
-      onPreloaderComplete,
       route,
       showHeader
     }

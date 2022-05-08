@@ -1,0 +1,28 @@
+.italic {
+  font-style: italic;
+}
+
+// .word {
+//   &::before {
+//     content: '\00a0';
+//     display: inline;
+//   }
+
+//   &:first-child {
+//     &::before {
+//       display: none;
+//     }
+//   }
+// }
+
+.whitespace {
+  display: inline !important;
+}
+
+.visible {
+  overflow: visible;
+}
+
+.hidden {
+  overflow: hidden;
+}

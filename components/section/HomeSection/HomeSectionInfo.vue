@@ -16,10 +16,13 @@
             string="Залиште ваш номер телефона і ми вам передзвоним"
           />
         </div>
-        <form ref="formRef" @submit.prevent>
+        <form ref="formRef" @submit.prevent="sendPhoneToEmail">
           <input
             ref="inputRef"
             type="number"
+            @change="handleInputValue"
+            minlength="9"
+            v-model="inputValue"
             placeholder="Ведіть ваш номер телефона"
             required
           />
@@ -42,12 +45,27 @@ import AnimatedTextChars from '~/components/animated/AnimatedTextChars.vue'
 export default defineComponent({
   components: { AnimatedTextChars, AnimatedTextWords },
   setup() {
-    const { $gsap } = useContext()
+    const { $gsap, $axios } = useContext()
     const homeInfoRef = ref(null)
     const homeInfoBgRef = ref(null)
     const inputRef = ref(null)
     const buttonRef = ref(null)
     const formRef = ref(null)
+    const inputValue = ref()
+
+    const handleInputValue = (e: any) => {
+      inputValue.value = e.target.value
+    }
+
+    const sendPhoneToEmail = async () => {
+     try {
+       await $axios.post('/mail-phone' , {number: inputValue.value})
+       alert('Номер відправлено')
+         inputValue.value = ''
+     }catch (e) {
+       alert('Сталась помилка')
+     }
+    }
 
     const show = () => {
       $gsap.to(homeInfoBgRef.value, {
@@ -93,7 +111,10 @@ export default defineComponent({
       homeInfoBgRef,
       inputRef,
       formRef,
-      buttonRef
+      buttonRef,
+      inputValue,
+      handleInputValue,
+      sendPhoneToEmail
     }
   }
 })

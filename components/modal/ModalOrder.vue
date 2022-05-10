@@ -8,26 +8,26 @@
     </div>
     <form>
       <div>
-        <span>Імя</span>
-        <input type="text">
+        <span>Імя*</span>
+        <input type="text" required>
       </div>
       <div>
-        <span>Фамілія</span>
-        <input type="text">
+        <span>Фамілія*</span>
+        <input type="text" required>
       </div>
       <div>
-        <span>Номер телефона</span>
-        <input type="text">
+        <span>Номер телефона*</span>
+        <input type="text" required>
       </div>
       <div>
-        <span>Місто</span>
-        <input type="text">
+        <span>Місто*</span>
+        <input type="text" required>
       </div>
       <div>
         <span>Код</span>
         <input type="text">
       </div>
-      <button>Відправити</button>
+      <button type="submit">Відправити</button>
     </form>
   </div>
 </template>

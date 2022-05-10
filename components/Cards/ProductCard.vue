@@ -44,10 +44,14 @@ export default defineComponent({
     category: {
       type: String,
       default: ''
+    },
+    stack: {
+      type: Number,
+      default: 1
     }
   },
 
-  setup({title, image, price, id, category}) {
+  setup({title, image, price, id, category, stack}) {
     const { store } = useContext()
    // @ts-ignore
     const { $gsap, $ScrollTrigger, $axios, $cookies } = useContext()
@@ -57,7 +61,7 @@ export default defineComponent({
 
     const handleCookie = () => {
       isBuy.value = true
-      store.dispatch('addProductToStore', {title, image, price, category, id})
+      store.dispatch('addProductToStore', {title, image, price, category, id, stack})
       $cookies.set(`Products`, store.state.products)
     }
 
@@ -66,23 +70,6 @@ export default defineComponent({
         if(store.state.products.find((item: any) => item.id === id)) {
           isBuy.value = true
         }
-      }, 200)
-    })
-
-    onMounted(() => {
-      setTimeout(() => {
-        $ScrollTrigger.create({
-          trigger: cardRef.value,
-          start: 'center bottom',
-          onEnter() {
-            $gsap.to(cardRef.value, {
-              translateX: 0,
-              opacity: 1,
-              duration: 0.5,
-              ease: 'back.out(1.7)'
-            })
-          }
-        })
       }, 200)
     })
 
@@ -108,8 +95,6 @@ export default defineComponent({
   margin: 10px 20px;
   text-align: left;
   transition: all 0.3s ease-in;
-  transform: translateX(-20px);
-  opacity: 0;
   overflow: hidden;
 
   @media (min-width: 1024px) {

@@ -43,37 +43,37 @@
         <AnimatedTextWords string="Корзина" />
       </div>
       <div class="basket-pc__form">
-        <form>
+        <form @submit.prevent="sendOrderToEmail">
           <div class="name">
             <div>
               <span>Імя*</span>
-              <input type="text" required />
+              <input type="text" v-model="nameRef" required />
             </div>
             <div>
               <span>Фамілія*</span>
-              <input type="text" required />
+              <input type="text" v-model="lastNameRef" required />
             </div>
           </div>
           <div class="number">
             <span>Номер Телефона*</span>
-            <input type="text" required />
+            <input type="text" v-model="numberRef" required />
           </div>
           <div class="address">
             <div>
               <span>Місто*</span>
-              <input type="text" required />
+              <input type="text" v-model="cityRef" required />
             </div>
             <div>
-              <span>Країна*</span>
-              <input type="text" required />
+              <span>Країна</span>
+              <input type="text" v-model="countryRef" />
             </div>
           </div>
           <div class="code">
-            <span>Код*</span>
-            <input type="text" required />
+            <span>Код</span>
+            <input type="text" v-model="codeRef" />
           </div>
           <div class="button-con">
-            <button :disabled="!totalPrice" :class="{disabled: !totalPrice}">Замовити</button>
+            <button type="submit" :disabled="!totalPrice" :class="{disabled: !totalPrice}">Замовити</button>
             <button>Скасувати</button>
           </div>
         </form>
@@ -119,10 +119,16 @@ export default {
   components: {ModalOrder, CartItemsPc, CartItems, AnimatedTextWords },
 
   setup() {
-    const { store, $cookies } = useContext()
+    const { store, $cookies, $axios } = useContext()
     const products = ref([])
     const totalPrice = ref()
     const isModal = ref(false)
+    const nameRef = ref('')
+    const lastNameRef = ref('')
+    const numberRef = ref('')
+    const cityRef = ref('')
+    const countryRef = ref('')
+    const codeRef = ref('')
 
     onMounted(() => {
       setTimeout(() => {
@@ -154,12 +160,27 @@ export default {
       totalPrice.value -= currentPrice
     }
 
+    const sendOrderToEmail = async () => {
+     // await $axios.post('/mail-order', {
+     //   name: nameRef.value, lastName: lastNameRef.value,
+     //   number: numberRef.value, city: cityRef.value,
+     //   order: products.value})
+
+    }
+
     return {
       products,
       deleteProduct,
       totalPrice,handleTotalPricePlus, handleTotalPriceMinus,
       isModal,
-      handleShowModal
+      handleShowModal,
+      nameRef,
+      lastNameRef,
+      numberRef,
+      codeRef,
+      countryRef,
+      cityRef,
+      sendOrderToEmail
     }
   }
 }

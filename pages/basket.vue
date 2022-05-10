@@ -3,7 +3,37 @@
     <div class="basket phone">
 
       <template v-if="isModal">
-        <ModalOrder :handleShowModal="handleShowModal"/>
+        <div class="modal-order">
+          <div @click="handleShowModal" class="close">
+            <svg width="42" height="42" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M31.3355 9.4769L32.5233 10.6647L10.6648 32.5215L9.47705 31.3345L31.3355 9.4769Z" fill="#151515" fill-opacity="0.6"/>
+              <path d="M10.6648 9.4769L32.5233 31.3337L31.3355 32.5223L9.47705 10.6655L10.6648 9.4769Z" fill="#151515" fill-opacity="0.6"/>
+            </svg>
+          </div>
+          <form @submit.prevent="sendOrderToEmail">
+            <div>
+              <span>Імя*</span>
+              <input type="text" v-model="nameRef" required>
+            </div>
+            <div>
+              <span>Фамілія*</span>
+              <input type="text" v-model="lastNameRef" required>
+            </div>
+            <div>
+              <span>Номер телефона*</span>
+              <input type="text" v-model="numberRef" required>
+            </div>
+            <div>
+              <span>Місто*</span>
+              <input type="text" v-model="cityRef" required>
+            </div>
+            <div>
+              <span>Код</span>
+              <input v-model="codeRef" type="text">
+            </div>
+            <button type="submit" :disabled="activeRef">Відправити</button>
+          </form>
+        </div>
       </template>
 
       <div class="basket__title">
@@ -73,7 +103,7 @@
             <input type="text" v-model="codeRef" />
           </div>
           <div class="button-con">
-            <button type="submit" :disabled="!totalPrice" :class="{disabled: !totalPrice}">Замовити</button>
+            <button type="submit" :disabled="!totalPrice && !activeRef" :class="{disabled: !totalPrice}">Замовити</button>
             <button>Скасувати</button>
           </div>
         </form>
@@ -129,10 +159,12 @@ export default {
     const cityRef = ref('')
     const countryRef = ref('')
     const codeRef = ref('')
+    const activeRef = ref(false)
 
     onMounted(() => {
       setTimeout(() => {
         products.value = store.state.products
+        store.dispatch('changeProductStack')
       }, 100)
       setTimeout(() => {
         totalPrice.value = products.value.reduce((accumulator, currentValue) => {
@@ -161,11 +193,29 @@ export default {
     }
 
     const sendOrderToEmail = async () => {
-     // await $axios.post('/mail-order', {
-     //   name: nameRef.value, lastName: lastNameRef.value,
-     //   number: numberRef.value, city: cityRef.value,
-     //   order: products.value})
-
+     try {
+       activeRef.value = true
+       await $axios.post('/mail-order', {
+         name: nameRef.value, lastName: lastNameRef.value,
+         number: numberRef.value, city: cityRef.value,
+         order: store.state.products
+       })
+       alert('Заказ відправлено')
+       nameRef.value = ''
+       lastNameRef.value = ''
+       numberRef.value = ''
+       cityRef.value = ''
+       countryRef.value = ''
+       codeRef.value = ''
+       products.value = []
+       store.dispatch('deleteAllProduct')
+       $cookies.set('Products', store.state.products)
+       totalPrice.value = 0
+       activeRef.value = false
+     }
+     catch (e) {
+       alert(e)
+     }
     }
 
     return {
@@ -180,7 +230,8 @@ export default {
       codeRef,
       countryRef,
       cityRef,
-      sendOrderToEmail
+      sendOrderToEmail,
+      activeRef,
     }
   }
 }
@@ -198,6 +249,63 @@ export default {
 
     @media (min-width: 1024px) {
       display: none;
+    }
+
+    .modal-order {
+      position: absolute;
+      width: 80%;
+      top: 7%;
+      z-index: 100;
+      border-radius: 15px;
+      background-color: #fff;
+      box-shadow: 0 0 15px #151515;
+      left: 10%;
+
+      .close {
+        position: absolute;
+        right: 0;
+        top: 5px;
+        padding-right: 10px;
+      }
+
+      form {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        padding: 15% 30px 10% 30px;
+        div {
+          display: flex;
+          flex-direction: column;
+          margin-bottom: 10px;
+          span {
+            font-size: 18px;
+            line-height: 100.6%;
+            font-family: var(--font-monument-grotesk);
+            color: var(--color-black);
+            padding-left: 5px;
+            padding-bottom: 3px;
+          }
+          input {
+            border-radius: 15px;
+            background: none;
+            border: 1px solid #151515;
+            padding: 5px 10px;
+            font-size: 18px;
+            outline: none;
+            color: var(--color-black);
+          }
+        }
+
+        button {
+          border-radius: 5px;
+          background-color: #151515;
+          color: var(--color-white);
+          border: 1px solid #151515;
+          outline: none;
+          padding: 10px 0;
+          margin-top: 40px;
+        }
+      }
     }
 
     &__title {

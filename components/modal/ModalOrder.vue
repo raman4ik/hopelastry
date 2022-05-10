@@ -1,51 +1,63 @@
 <template>
-  <div class="modal-order">
-    <div @click="handleShowModal" class="close">
-      <svg width="42" height="42" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M31.3355 9.4769L32.5233 10.6647L10.6648 32.5215L9.47705 31.3345L31.3355 9.4769Z" fill="#151515" fill-opacity="0.6"/>
-        <path d="M10.6648 9.4769L32.5233 31.3337L31.3355 32.5223L9.47705 10.6655L10.6648 9.4769Z" fill="#151515" fill-opacity="0.6"/>
-      </svg>
-    </div>
-    <form>
-      <div>
-        <span>Імя*</span>
-        <input type="text" required>
-      </div>
-      <div>
-        <span>Фамілія*</span>
-        <input type="text" required>
-      </div>
-      <div>
-        <span>Номер телефона*</span>
-        <input type="text" required>
-      </div>
-      <div>
-        <span>Місто*</span>
-        <input type="text" required>
-      </div>
-      <div>
-        <span>Код</span>
-        <input type="text">
-      </div>
-      <button type="submit">Відправити</button>
-    </form>
-  </div>
+<!--  <div class="modal-order">-->
+<!--    <div @click="handleShowModal" class="close">-->
+<!--      <svg width="42" height="42" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">-->
+<!--        <path d="M31.3355 9.4769L32.5233 10.6647L10.6648 32.5215L9.47705 31.3345L31.3355 9.4769Z" fill="#151515" fill-opacity="0.6"/>-->
+<!--        <path d="M10.6648 9.4769L32.5233 31.3337L31.3355 32.5223L9.47705 10.6655L10.6648 9.4769Z" fill="#151515" fill-opacity="0.6"/>-->
+<!--      </svg>-->
+<!--    </div>-->
+<!--    <form @submit.prevent="sendOrderToEmailPhone(nameRef, lastNameRef, numberRef, cityRef)">-->
+<!--      <div>-->
+<!--        <span>Імя*</span>-->
+<!--        <input type="text" v-model="nameRef" required>-->
+<!--      </div>-->
+<!--      <div>-->
+<!--        <span>Фамілія*</span>-->
+<!--        <input type="text" v-model="lastNameRef" required>-->
+<!--      </div>-->
+<!--      <div>-->
+<!--        <span>Номер телефона*</span>-->
+<!--        <input type="text" v-model="numberRef" required>-->
+<!--      </div>-->
+<!--      <div>-->
+<!--        <span>Місто*</span>-->
+<!--        <input type="text" v-model="cityRef" required>-->
+<!--      </div>-->
+<!--      <div>-->
+<!--        <span>Код</span>-->
+<!--        <input v-model="codeRef" type="text">-->
+<!--      </div>-->
+<!--      <button type="submit" :disabled="activeRef">Відправити</button>-->
+<!--    </form>-->
+<!--  </div>-->
 </template>
 
 <script lang="ts">
 import {defineComponent} from "@vue/composition-api";
+import {ref, useContext} from "@nuxtjs/composition-api";
 
 export default defineComponent({
-  props: {
-    handleShowModal: {
-      type: Function,
-      default: () => {}
-    }
-  },
+  // props: {
+  //   handleShowModal: {
+  //     type: Function,
+  //     default: () => {}
+  //   },
+  //   sendOrderToEmailPhone: {
+  //     type: Function,
+  //     default: () => {}
+  //   }
+  // },
   setup() {
-    const show = () => {}
 
-    return { show }
+    const nameRef = ref('')
+    const lastNameRef = ref('')
+    const numberRef = ref('')
+    const cityRef = ref('')
+    const countryRef = ref('')
+    const codeRef = ref('')
+    const activeRef = ref(false)
+
+    return {nameRef, lastNameRef, numberRef, cityRef, countryRef, codeRef, activeRef }
   }
 })
 </script>

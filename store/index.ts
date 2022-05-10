@@ -34,6 +34,31 @@ export const mutations: MutationTree<RootState> = {
     // @ts-ignore
     const newArray = state.products.filter(item => item.id !== id)
     state.products = newArray
+  },
+
+  DELETE_ALL_PRODUCT: (state) => {
+    // @ts-ignore
+    state.products = []
+  },
+
+  CHANGE_PRODUCTS_PLUS_STACK: (state, payload) => {
+    // @ts-ignore
+    const productIndex = state.products.findIndex(res => res.id === payload.id)
+    // @ts-ignore
+    state.products[productIndex].stack++
+  },
+  CHANGE_PRODUCTS_MINUS_STACK: (state, payload) => {
+    // @ts-ignore
+    const productIndex = state.products.findIndex(res => res.id === payload.id)
+    // @ts-ignore
+    if(state.products[productIndex.stack <= 0]) return
+    // @ts-ignore
+    state.products[productIndex].stack--
+  },
+
+  CHANGE_PRODUCTS_STACK: (state) => {
+    // @ts-ignore
+    state.products.forEach(res => res.stack = 1)
   }
 }
 
@@ -53,7 +78,20 @@ export const actions: ActionTree<RootState, RootState> = {
     commit('DELETE_PRODUCT', id)
   },
 
+  deleteAllProduct({ commit }) {
+    commit('DELETE_ALL_PRODUCT')
+  },
+
   savedProducts({ commit }, payload) {
     commit('SAVED_PRODUCTS', payload)
+  },
+  changeProductPlusStack({commit}, payload) {
+    commit('CHANGE_PRODUCTS_PLUS_STACK', payload)
+  },
+  changeProductMinusStack({commit}, payload) {
+    commit('CHANGE_PRODUCTS_MINUS_STACK', payload)
+  },
+  changeProductStack({commit}) {
+    commit('CHANGE_PRODUCTS_STACK')
   }
 }

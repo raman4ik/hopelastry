@@ -29,7 +29,7 @@
 
 <script lang="ts">
 import {defineComponent} from "@vue/composition-api";
-import {ref, useContext} from "@nuxtjs/composition-api";
+import {onMounted, ref, useContext} from "@nuxtjs/composition-api";
 
 export default defineComponent({
   props: {
@@ -73,24 +73,31 @@ export default defineComponent({
   },
 
   setup({deleteProduct, id, price, handleTotalPricePlus, handleTotalPriceMinus}) {
-    const count = ref(1)
+    const {store} = useContext()
+    const currentPrice = ref(price)
+    const count = ref(store.state.products.find((res: any) => res.id === id).stack)
     // @ts-ignore
     const updDeleteProduct = () => deleteProduct(id, currentPrice.value)
     const handleCountPlus = () => {
       count.value++
       currentPrice.value += price
+      store.dispatch('changeProductPlusStack', {id})
       // @ts-ignore
       handleTotalPricePlus(price)
     }
-    const currentPrice = ref(price)
 
     const handleCountMinus = () => {
       if(count.value === 1) return
       count.value--
       currentPrice.value -= price
+      store.dispatch('changeProductMinusStack', {id})
       // @ts-ignore
       handleTotalPriceMinus(price)
     }
+
+    onMounted(() => {
+      currentPrice.value = store.state.products.find((res: any) => res.id === id).stack * price
+    })
 
     return {updDeleteProduct, count, handleCountPlus, handleCountMinus, currentPrice}
   }
@@ -165,6 +172,7 @@ export default defineComponent({
         &-minus {
           color: var(--color-black);
           line-height: 100.6%;
+          cursor: pointer;
 
           @media (min-width: 768px) {
             font-size: 24px;
@@ -185,6 +193,7 @@ export default defineComponent({
         &-plus {
           color: var(--color-black);
           line-height: 100.6%;
+          cursor: pointer;
 
           @media (min-width: 768px) {
             font-size: 24px;
